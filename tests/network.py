@@ -110,7 +110,7 @@ def train(learning_rate):
                     activation += hidden_layer[k] * output_layer_weights[k][j]
                 output_layer[j] = sigmoid(activation)
                 
-            print(f"input: <{training_inputs[i][0]}> <{training_inputs[i][1]} | output: <{output_layer[0]}> | expected: {training_outputs[i][0]} | error: {(output_layer[0] - training_outputs[i][0])}")
+            print(f"input: <{training_inputs[i][0]}> <{training_inputs[i][1]}> | output: <{round(output_layer[0], 16)}> | expected: {round(training_outputs[i][0], 16)} | output: {round(output_layer[0], 16)} | error: {round((output_layer[0] - training_outputs[i][0]), 16)} -> {round(((output_layer[0] - training_outputs[i][0]) * 100), 1)}%")
             training_progression.append(output_layer[0] - training_outputs[i][0])
                 
             # Back Propagation
@@ -156,13 +156,32 @@ def view_training_progression_data(count):
     training_progression = []
 
 def main():
-    count = 0.1
-    while count < 10:
-        train(count)
-        print(f" #### LEARNING RATE -> {count} ####")
-        view_training_progression_data(int(count * 10))
-        training_progression = []
-        count += 0.1
+    while True:
+        print('''
+    . 1 - Normal Training 
+    . 2 - Test Learning Rates
+    . 3 - Exit
+        ''')
+        option = input("    >> ")
+        try: 
+            option = int(option)
+        except Exception:
+            continue
+        if option == 1:
+            lr = 0.5
+            print("Training with learning rate set to {lr}")
+            train(lr)
+        elif option == 2:
+            count = 0.1
+            while count < 10:
+                train(count)
+                print(f" #### LEARNING RATE -> {count} ####")
+                view_training_progression_data(int(count * 10))
+                training_progression = []
+                count += 0.1
+        elif option == 3:
+            exit()
+        continue
 
 
 main()
