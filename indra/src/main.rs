@@ -5,7 +5,7 @@
 
 use rand::Rng;
 
-const E: f64 =  2.7182818284;
+const E_CTE: f64 =  2.7182818284;
 
 #[allow(dead_code)]
 struct LayerNeuron {
@@ -122,7 +122,7 @@ impl Network {
         
     fn compress_value(&self, x: f64) -> f64 {
         // TODO: implement more than sigmoid
-        return 1.0 / (1.0 + (f64::powf(E, -x)))
+        return 1.0 / (1.0 + (f64::powf(E_CTE, -x)))
     }
 }
 
