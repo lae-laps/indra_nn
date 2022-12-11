@@ -64,21 +64,18 @@ def train(learning_rate):
         [0.0],
     ]
 
-    print("initializing input nodes")
     for i in range(num_input_nodes):
         for j in range(num_hidden_nodes):
             hidden_layer_weights[i][j] = init_weights()
 
     print(hidden_layer_weights)
 
-    print("initializing hidden nodes")
     for i in range(num_hidden_nodes):
         for j in range(num_output_nodes):
             output_layer_weights[i][j - 1] = init_weights()
 
     print(output_layer_weights)
 
-    print("initializing output nodes")
     for i in range(num_output_nodes):
         output_later_bias[i] = init_weights()
 
