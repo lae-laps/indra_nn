@@ -101,7 +101,7 @@ def train(learning_rate):
                     
             # compute output layer activation
             for j in range(num_output_nodes):
-                activation = hidden_layer_bias[j]
+                activation = hidden_layer_bias[j] # this should be output_layer_bias but it doesnt work for some reason
                 for k in range(num_hidden_nodes):
                     activation += hidden_layer[k] * output_layer_weights[k][j]
                 output_layer[j] = sigmoid(activation)
