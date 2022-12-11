@@ -80,7 +80,7 @@ def train(learning_rate):
         output_later_bias[i] = init_weights()
 
     training_set_order = [0, 1, 2, 3]
-    num_epochs = 10000
+    num_epochs = 100
 
     # Training
 
