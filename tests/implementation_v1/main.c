@@ -82,7 +82,7 @@ int main() {
                 
             // Compute output layer activation
             for (int j = 0; j < numOutputs; j++) {
-                double activation = hiddenLayerBias[j];
+                double activation = outputBias[j];
                 for (int k = 0; k < numHiddenNodes; k++) {
                     activation += hiddenLayer[k] * outputWeights[k][j];
                 }

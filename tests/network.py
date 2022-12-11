@@ -37,7 +37,7 @@ def train(learning_rate):
     output_layer = [0] * num_output_nodes
 
     hidden_layer_bias = [0] * num_hidden_nodes
-    output_later_bias = [0] * num_output_nodes
+    output_layer_bias = [0] * num_output_nodes
 
     hidden_layer_weights = [0] * num_input_nodes  
     for i in range(len(hidden_layer_weights)): hidden_layer_weights[i] = [0] * num_hidden_nodes
@@ -77,10 +77,10 @@ def train(learning_rate):
     print(output_layer_weights)
 
     for i in range(num_output_nodes):
-        output_later_bias[i] = init_weights()
+        output_layer_bias[i] = init_weights()
 
     training_set_order = [0, 1, 2, 3]
-    num_epochs = 100
+    num_epochs = 10000
 
     # Training
 
@@ -127,7 +127,7 @@ def train(learning_rate):
                     
             # apply change in output weights
             for j in range(num_output_nodes):
-                output_later_bias[j] += delta_output[j] * learning_rate
+                output_layer_bias[j] += delta_output[j] * learning_rate
                 for k in range(num_hidden_nodes):
                     output_layer_weights[k][j] += hidden_layer[k] * delta_output[j] * learning_rate
                     
@@ -182,4 +182,3 @@ def main():
 
 main()
 view_training_progression_data()
-
