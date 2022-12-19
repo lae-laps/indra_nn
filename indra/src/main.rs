@@ -51,26 +51,30 @@ impl Clone for InputNeuron {
 
 #[allow(dead_code)]
 struct Network {
+    learning_rate: f64,
     input_layer_size: usize,
     hidden_layer_size: usize,
     output_layer_size: usize,
     input_layer: Vec<InputNeuron>,
     hidden_layer: Vec<LayerNeuron>,
     output_layer: Vec<LayerNeuron>,
+    training_data: Vec<Vec<Vec<f64>>>,
 }
 
 impl Network {
-    fn new(input_layer_size: usize, hidden_layer_size: usize, output_layer_size: usize) -> Network {
+    fn new(input_layer_size: usize, hidden_layer_size: usize, output_layer_size: usize, learning_rate: f64) -> Network {
         Self {
+            learning_rate,
             input_layer_size,
             hidden_layer_size,
             output_layer_size,
             input_layer: Vec::with_capacity(input_layer_size),
             hidden_layer: Vec::with_capacity(hidden_layer_size),
             output_layer: Vec::with_capacity(output_layer_size),
+            training_data: Vec::with_capacity(2),
         }
     }
-
+        
     fn fill_input_layer(&mut self, data: Vec<f64>) -> u8 {
         if data.len() != self.input_layer_size {
             // TODO: implement custom error type
@@ -86,7 +90,7 @@ impl Network {
         }
         return 0
     }
-
+        
     fn fordward_propagate(&mut self) {
         // hidden layer activation
         for i in 0..self.hidden_layer_size {
@@ -108,7 +112,38 @@ impl Network {
     }
 
     fn back_propagate(&mut self) {
-        
+        // compute change in output weights
+        let mut output_layer_cost: Vec<f64> = Vec::with_capacity(self.output_layer_size); 
+        for j in 0..self.output_layer_size {
+            let error = self.training_data[1][j];
+            output_layer_cost[j] = error * self.derivative_gradient_descent(self.output_layer[j].activation);
+        }
+
+        // compute change in hidden weights
+        let mut hidden_layer_cost: Vec<f64> = Vec::with_capacity(self.hidden_layer_size); 
+        for j in 0..self.hidden_layer_size {
+            let mut error = 0.0;
+            for k in 0..self.output_layer_size {
+                error += hidden_layer_cost[k] * self.output_layer[j].weights[k]
+            }
+            hidden_layer_cost[j] = error * self.derivative_gradient_descent(self.hidden_layer[j].activation);
+        }
+            
+        // apply change in output weights
+        for j in 0..self.output_layer_size {
+            self.output_layer[j].bias += output_layer_cost[j] * self.learning_rate;
+            for k in 0..self.hidden_layer_size {
+                self.output_layer[k].weights[j] += self.hidden_layer[k].activation * output_layer_cost[j] * self.learning_rate;
+            }
+        }
+            
+        // apply change in hidden weights
+        for j in 0..self.hidden_layer_size {
+            self.hidden_layer[j].bias += hidden_layer_cost[j] * self.learning_rate;
+            for k in 0..self.input_layer_size {
+                self.hidden_layer[k].weights[j] += self.training_data[0][k] * hidden_layer_cost[j] * self.learning_rate;
+            }
+        }
     }
 
     fn print_fordward_pass_training_results(&mut self) {
@@ -119,6 +154,10 @@ impl Network {
             // (self.output_layer - expected output) % 100
         );*/
     }
+
+    fn derivative_gradient_descent(&self, x: f64) -> f64 {
+        return x * (1.0 - x);
+    }
         
     fn compress_value(&self, x: f64) -> f64 {
         // TODO: implement more than sigmoid
@@ -127,6 +166,21 @@ impl Network {
 }
 
 fn main() {
-     
+    // testing the network
+    let mut network = Network::new(2, 2, 1, 0.1);
+    network.training_data = vec![
+    vec![
+        vec![0.0, 0.0],
+        vec![0.0],
+    ], vec![
+        vec![0.0, 1.0],
+        vec![1.0],
+    ], vec![
+        vec![1.0, 0.0],
+        vec![1.0],
+    ], vec![
+        vec![1.0, 1.0],
+        vec![0.0],
+    ]];
 }
 

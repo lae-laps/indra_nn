@@ -146,8 +146,8 @@ def view_training_progression_data(count):
 
     plt.plot(base, training_progression)
     plt.grid(color = 'gray', linestyle = '--', linewidth = 0.5)
-    #plt.show()
-    plt.savefig(f"training_data/img{count}.png")
+    plt.show()
+    #plt.savefig(f"training_data/img{count}.png")
     plt.clf()
     training_progression = []
 

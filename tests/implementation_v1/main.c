@@ -13,7 +13,7 @@
 
 int main() {
    
-    double error_progression[10000];
+    double error_progression[100000];
 
     const double learning_rate = 1.0f;
     
@@ -60,7 +60,7 @@ int main() {
     }
 
     int trainingSetOrder[] = {0, 1, 2, 3};
-    int numberOfEpochs = 10000;
+    int numberOfEpochs = 100000;
 
     // Training
     
