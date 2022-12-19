@@ -1,4 +1,4 @@
-# Indra Artificial Neural Network
+# Rust Artificial Neural Network Library
 
-Indra ANN is a rust library to implement neural networks natively with speed and flexibility
+Rust ANN is a rust library to implement neural networks natively with speed and flexibility
 
