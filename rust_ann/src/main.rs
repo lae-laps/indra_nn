@@ -111,11 +111,11 @@ impl Network {
         }
     }
 
-    fn back_propagate(&mut self) {
+    fn back_propagate(&mut self, epoch: usize) {
         // compute change in output weights
         let mut output_layer_cost: Vec<f64> = Vec::with_capacity(self.output_layer_size); 
         for j in 0..self.output_layer_size {
-            let error = self.training_data[1][j];
+            let error = self.training_data[epoch][1][j];
             output_layer_cost[j] = error * self.derivative_gradient_descent(self.output_layer[j].activation);
         }
 
@@ -141,8 +141,18 @@ impl Network {
         for j in 0..self.hidden_layer_size {
             self.hidden_layer[j].bias += hidden_layer_cost[j] * self.learning_rate;
             for k in 0..self.input_layer_size {
-                self.hidden_layer[k].weights[j] += self.training_data[0][k] * hidden_layer_cost[j] * self.learning_rate;
+                self.hidden_layer[k].weights[j] += self.training_data[epoch][0][k] * hidden_layer_cost[j] * self.learning_rate;
             }
+        }
+    }
+
+    fn train(&mut self) {
+        for epoch in 0..self.training_data.len() {
+            // TODO: shuffle training order
+            self.fill_input_layer(self.training_data[epoch][0]);
+            self.fordward_propagate();
+            self.print_fordward_pass_training_results();
+            self.back_propagate(epoch);
         }
     }
 
@@ -153,6 +163,10 @@ impl Network {
             // self.output_layer - expected output,
             // (self.output_layer - expected output) % 100
         );*/
+    }
+
+    fn print_network_structure(&mut self) {
+        println!("({}) - ({}) - ({})", self.input_layer_size, self.hidden_layer_size, self.output_layer_size);
     }
 
     fn derivative_gradient_descent(&self, x: f64) -> f64 {
@@ -182,5 +196,7 @@ fn main() {
         vec![1.0, 1.0],
         vec![0.0],
     ]];
+    network.print_network_structure();
+    network.train();
 }
 
